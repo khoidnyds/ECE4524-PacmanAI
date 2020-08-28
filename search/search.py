@@ -93,19 +93,21 @@ def depthFirstSearch(problem):
     if problem.isGoalState(problem.getStartState()):
         return []
 
-    # (current node, current fringe, current visited-nodes list)
     stack = util.Stack()  # FILO
-    stack.push((problem.getStartState(), [], [problem.getStartState()]))
+    expandedState = []  # current exploring state
+    stack.push((problem.getStartState(), []))  # push start node to stack
 
     while not stack.isEmpty():
-        curNode, curFringe, curVisited = stack.pop()
-        if problem.isGoalState(curNode):
-            return curFringe
+        curNode, curMove = stack.pop()
+        if curNode not in expandedState:  
+            expandedState.append(curNode)
 
-        # exploring neighboring nodes
-        for nextNode, nextFringe, _ in problem.getSuccessors(curNode):
-            if nextNode not in curVisited:
-                stack.push((nextNode, curFringe + [nextFringe], curVisited + [nextNode]))
+            if problem.isGoalState(curNode):
+                return curMove
+            else:
+                # exploring neighboring nodes
+                for nextNode, nextMove, _ in problem.getSuccessors(curNode):
+                    stack.push((nextNode, curMove + [nextMove]))
     return []
 
     util.raiseNotDefined()
@@ -146,24 +148,19 @@ def uniformCostSearch(problem):
 
     priQueue = util.PriorityQueue()
     visited = [problem.getStartState()]
-    # priority queue (item, priority)
-    priQueue.push((problem.getStartState(), [], visited), 0)
+    # priority queue: (item, priority)
+    cost = 0
+    priQueue.push((problem.getStartState(), [], visited, cost), 0)
 
     while not priQueue.isEmpty():
-        curNode, curFringe, curVisited = priQueue.pop()
-
+        curNode, curFringe, curVisited, cost = priQueue.pop()
         if problem.isGoalState(curNode):
             return curFringe
 
-        # add all neighboring nodes as visited nodes
         for nextNode, nextFringe, _ in problem.getSuccessors(curNode):
             if nextNode not in curVisited:
                 visited += [nextNode]
-                nextState = (nextNode, curFringe + [nextFringe], visited)
-                priQueue.push(nextState, 1)
-            else:
-                a=1
-                #priQueue.update()
+                priQueue.push((nextNode, curFringe + [nextFringe], visited), 1)
     return []
 
     util.raiseNotDefined()
