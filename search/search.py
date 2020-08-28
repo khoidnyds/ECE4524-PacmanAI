@@ -94,13 +94,13 @@ def depthFirstSearch(problem):
         return []
 
     stack = util.Stack()  # FILO
-    expandedState = []  # current exploring state
+    visited = []  # current exploring state
     stack.push((problem.getStartState(), []))  # push start node to stack
 
     while not stack.isEmpty():
         curNode, curMove = stack.pop()
-        if curNode not in expandedState:  
-            expandedState.append(curNode)
+        if curNode not in visited:
+            visited.append(curNode)
 
             if problem.isGoalState(curNode):
                 return curMove
@@ -119,21 +119,22 @@ def breadthFirstSearch(problem):
     if problem.isGoalState(problem.getStartState()):
         return []
 
-    # (current node, current visited-nodes list)
     queue = util.Queue()  # FIFO
-    visited = [problem.getStartState()]
-    queue.push((problem.getStartState(), [], visited))
+    visited = []
+    # (current node, current move)
+    queue.push((problem.getStartState(), []))
 
     while not queue.isEmpty():
-        curNode, curFringe, curVisited = queue.pop()
-        if problem.isGoalState(curNode):
-            return curFringe
+        curNode, curMove = queue.pop()
+        if curNode not in visited:
+            visited.append(curNode)
 
-        # add all neighboring nodes as visited nodes
-        for nextNode, nextFringe, _ in problem.getSuccessors(curNode):
-            if nextNode not in curVisited:
-                visited += [nextNode]
-                queue.push((nextNode, curFringe + [nextFringe], visited))
+            if problem.isGoalState(curNode):
+                return curMove
+            else:
+                # exploring neighboring nodes
+                for nextNode, nextMove, _ in problem.getSuccessors(curNode):
+                    queue.push((nextNode, curMove + [nextMove]))
     return []
 
     util.raiseNotDefined()
