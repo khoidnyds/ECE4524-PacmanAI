@@ -148,20 +148,22 @@ def uniformCostSearch(problem):
         return []
 
     priQueue = util.PriorityQueue()
-    visited = [problem.getStartState()]
+    visited = {}  # exploring nodes need to store the current cost for each node
     # priority queue: (item, priority)
+    # NOTE: cost == priority
     cost = 0
-    priQueue.push((problem.getStartState(), [], visited, cost), 0)
+    priQueue.push((problem.getStartState(), [], cost), 0)
 
     while not priQueue.isEmpty():
-        curNode, curFringe, curVisited, cost = priQueue.pop()
-        if problem.isGoalState(curNode):
-            return curFringe
+        curNode, curMove, curCost = priQueue.pop()
+        if curNode not in visited or curCost < visited[curNode]:
+            visited[curNode] = curCost
 
-        for nextNode, nextFringe, _ in problem.getSuccessors(curNode):
-            if nextNode not in curVisited:
-                visited += [nextNode]
-                priQueue.push((nextNode, curFringe + [nextFringe], visited), 1)
+            if problem.isGoalState(curNode):
+                return curMove
+            else:
+                for nextNode, nextMove, nextCost in problem.getSuccessors(curNode):
+                    priQueue.push((nextNode, curMove + [nextMove], curCost + nextCost), curCost + nextCost)
     return []
 
     util.raiseNotDefined()
