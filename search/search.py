@@ -94,13 +94,13 @@ def depthFirstSearch(problem):
         return []
 
     stack = util.Stack()  # FILO
-    visited = []  # current exploring state
+    visited = set()  # current exploring state using SET
     stack.push((problem.getStartState(), []))  # push start node to stack
 
     while not stack.isEmpty():
         curNode, curMove = stack.pop()
         if curNode not in visited:
-            visited.append(curNode)
+            visited.add(curNode)
 
             if problem.isGoalState(curNode):
                 return curMove
@@ -120,14 +120,14 @@ def breadthFirstSearch(problem):
         return []
 
     queue = util.Queue()  # FIFO
-    visited = []
+    visited = set()
     # (current node, current move)
     queue.push((problem.getStartState(), []))
 
     while not queue.isEmpty():
         curNode, curMove = queue.pop()
         if curNode not in visited:
-            visited.append(curNode)
+            visited.add(curNode)
 
             if problem.isGoalState(curNode):
                 return curMove
@@ -148,7 +148,7 @@ def uniformCostSearch(problem):
         return []
 
     priQueue = util.PriorityQueue()
-    visited = {}  # exploring nodes need to store the current cost for each node
+    visited = {}  # exploring nodes need to store the current cost for each node using DICTIONARY
     # priority queue: (item, priority)
     # NOTE: cost == priority
     cost = 0
