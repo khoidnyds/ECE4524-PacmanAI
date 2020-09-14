@@ -373,6 +373,25 @@ def cornersHeuristic(state, problem):
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
     "*** YOUR CODE HERE ***"
 
+    pacman = state[0]   # Get current position
+    import sys
+    distance = [sys.maxint]
+
+    # Calculate Manhattan distance to each unvisited goal
+    for corner in corners:
+        distance.append(util.manhattanDistance(pacman, corner))
+
+    if state[1][0] is False:
+        distance.append(util.manhattanDistance(pacman, corners[0]))
+    if state[1][1] is False:
+        distance.append(util.manhattanDistance(pacman, corners[1]))
+    if state[1][2] is False:
+        distance.append(util.manhattanDistance(pacman, corners[2]))
+    if state[1][3] is False:
+        distance.append(util.manhattanDistance(pacman, corners[3]))
+    # Heuristic is distance to closest goal
+    return min(distance)
+
     return 0 # Default to trivial solution
 
 class AStarCornersAgent(SearchAgent):
