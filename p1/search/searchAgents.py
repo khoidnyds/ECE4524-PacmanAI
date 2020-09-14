@@ -300,27 +300,27 @@ class CornersProblem(search.SearchProblem):
             self.current_location = starting_location
             self.visited(self.current_location)
 
-        def get_corner(self):
-            return dict(zip(self.corners, self.corners_visited))
-
-        def visited(self, point):
-            for i in range(0, 4):
-                if self.corners[i] == point:
-                    self.corners_visited[i] = True
-            self.current_location = point
-
-        def finished(self):
-            return all(corner == True for corner in self.corners_visited)
-
-        def get_position(self):
-            return self.current_location
-
         def __eq__(self, other):
             return self.get_position() == other.get_position() and self.corners_visited == other.corners_visited
 
         def __hash__(self):
             return hash((self.get_position(), self.corners_visited[0], self.corners_visited[1], self.corners_visited[2],
                          self.corners_visited[3]))
+
+        def get_corner(self):
+            return dict(zip(self.corners, self.corners_visited))
+
+        def visited(self, point):
+            for i in range(4):
+                if self.corners[i] == point:
+                    self.corners_visited[i] = True
+            self.current_location = point
+
+        def finished(self):
+            return all(corner is True for corner in self.corners_visited)
+
+        def get_position(self):
+            return self.current_location
 
     def __init__(self, startingGameState):
         """
@@ -364,23 +364,14 @@ class CornersProblem(search.SearchProblem):
             state, 'action' is the action required to get there, and 'stepCost'
             is the incremental cost of expanding to that successor
         """
-
-        successors = []
-        for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
-            # Add a successor state to the successor list if the action is legal
-            # Here's a code snippet for figuring out whether a new position hits a wall:
-            #   x,y = currentPosition
-            #   dx, dy = Actions.directionToVector(action)
-            #   nextx, nexty = int(x + dx), int(y + dy)
-            #   hitsWall = self.walls[nextx][nexty]
-
-            "*** YOUR CODE HERE ***"
+        "*** YOUR CODE HERE ***"
         successors = []
         for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
             x, y = state.get_position()
             dx, dy = Actions.directionToVector(action)
             nextx, nexty = int(x + dx), int(y + dy)
             hitsWall = self.walls[nextx][nexty]
+            # get all the surrounding successors
             if not hitsWall:
                 point = (nextx, nexty)
                 corner_state_copy = copy.deepcopy(state)
@@ -429,10 +420,9 @@ def cornersHeuristic(state, problem):
 
     # Just explore towards the unvisited corners
     cost = 0
-    current_position = state.get_position()
-    pacman = current_position
+    pacman = state.get_position()
 
-    # Sum all the cost to all unvisited corners
+    # The cost is added from each corner that pacman reach
     while unvisited_corners:
         heuristic, corner = min([(util.manhattanDistance(pacman, corner), corner) for corner in unvisited_corners])
         pacman = corner
