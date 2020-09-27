@@ -210,7 +210,7 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
     def AlphaBeta(self, gameState, current_depth, agentIndex, alpha, beta, value):
         # stop when reach the depth or win or lose
         if current_depth > self.depth or gameState.isWin() or gameState.isLose():
-            return self.evaluationFunction(gameState)
+            return self.evaluationFunction(gameState), alpha, beta
         
         # next possible moves
         next_moves = [action for action in gameState.getLegalActions(agentIndex) if action is not 'Stop']
@@ -223,33 +223,36 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
             next_depth += 1
         
         # decide the next move here
-        if agentIndex == 0 and current_depth == 1: # at root
+        if agentIndex == 0 and current_depth == 1: # at root always max node
             scores = []
             for action in next_moves:
-                value = self.AlphaBeta(gameState.generateSuccessor(agentIndex, action), next_depth, next_agent, alpha, beta, value)
-                scores.append(alpha)
-                if value > beta:
-                    return next_moves[scores.index(max(scores))]
+                value, _, _ = self.AlphaBeta(gameState.generateSuccessor(agentIndex, action), next_depth, next_agent, alpha, beta, value)
+                scores.append(value)
+                alpha = max(scores) # update alpha from children
+                if beta < value: # prune
+                    break
             return next_moves[scores.index(max(scores))]
         
         # update alpha, beta
-        if agentIndex:
-            value = beta
+        if agentIndex: # min node
+            value = sys.maxsize
             for action in next_moves:
-                beta = self.AlphaBeta(gameState.generateSuccessor(agentIndex, action), next_depth, next_agent, alpha, beta, value)
-                value = min(value, beta)
+                new_value, _, beta = self.AlphaBeta(gameState.generateSuccessor(agentIndex, action), next_depth, next_agent, alpha, beta, value)
+                value = min(value, new_value) # compare new_value to old value, update if necessary
                 if alpha > value: # prune
-                    return value
+                    return value, alpha, beta
                 beta = min(beta, value)
-            return value
+            return value, alpha, beta
         
-        value = alpha
+        # max node
+        value = -sys.maxsize
         for action in next_moves:
-            value = max(value, self.AlphaBeta(gameState.generateSuccessor(agentIndex, action), next_depth, next_agent, alpha, beta, value))
+            new_value, alpha, _ = self.AlphaBeta(gameState.generateSuccessor(agentIndex, action), next_depth, next_agent, alpha, beta, value)
+            value = max(value, new_value) # compare new_value to old value, update if necessary
             if beta < value: # prune
-                return value
+                return value, alpha, beta
             alpha = max(alpha, value)
-        return value
+        return value, alpha, beta
 
 class ExpectimaxAgent(MultiAgentSearchAgent):
     """
