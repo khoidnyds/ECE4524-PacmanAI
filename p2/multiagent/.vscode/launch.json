@@ -123,6 +123,30 @@
             "args": ["-q", "q4" ,"--no-graphics"]
         },
         {
+            "name": "Q4-1",
+            "type": "python",
+            "request": "launch",
+            "program": "pacman.py",
+            "console": "integratedTerminal",
+            "args": ["-p", "ExpectimaxAgent", "-a", "depth=3", "-l", "minimaxClassic"]
+        },
+        {
+            "name": "Q4-2",
+            "type": "python",
+            "request": "launch",
+            "program": "pacman.py",
+            "console": "integratedTerminal",
+            "args": ["-p", "ExpectimaxAgent", "-a", "depth=3", "-l", "minimaxClassic"]
+        },
+        {
+            "name": "Q4-3",
+            "type": "python",
+            "request": "launch",
+            "program": "pacman.py",
+            "console": "integratedTerminal",
+            "args": ["-p", "ExpectimaxAgent", "-a", "depth=3", "-l", "minimaxClassic"]
+        },
+        {
             "name": "Q5-test",
             "type": "python",
             "request": "launch",

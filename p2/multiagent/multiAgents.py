@@ -85,27 +85,16 @@ class ReflexAgent(Agent):
         # Get new pacman position and food locations    
         current_food = currentGameState.getFood()
         x, y = newPos
-        w, h = currentGameState.data.layout.width, currentGameState.data.layout.height
- 
+
         # return fail value when ghost catch pacman
-        if (x, y) in ghosts:
+        if newPos in ghosts:
             return -1
         # return reward for food when pacman eat food
         if current_food[x][y]:
             return sys.maxsize
 
         # evaluate all food locations in the map by Manhantan distance, the farther the less points
-        food_score = []
-        for a in range(1, w - 1):
-            for b in range(1, h - 1):
-                if current_food[a][b]:
-                    distance = abs(x - a) + abs(y - b)
-                    food_score.append(distance)
- 
-        if food_score:
-            return w + h - min(food_score) # max score is (w + h) which is maximum score can get from the Manhantan distance
-        else:
-            return 0
+        return 1/min([util.manhattanDistance(newPos, food) for food in current_food.asList()]) # max score is (w + h) which is maximum score can get from the Manhantan distance
 
 def scoreEvaluationFunction(currentGameState):
     """
@@ -267,42 +256,34 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
         legal moves.
         """
         "*** YOUR CODE HERE ***"
-        return self.ExpectiMax(gameState, 1, 0)
+        return self.ExpectiMax(gameState, current_depth=1, agentIndex=0)
         util.raiseNotDefined()
 
-    def ExpectiMax(self, gameState, currentDepth, agentIndex):
-        "terminal check"
-        if currentDepth > self.depth or gameState.isWin() or gameState.isLose():
+    def ExpectiMax(self, gameState, current_depth, agentIndex):
+        # stop when reach the depth or win or lose
+        if current_depth > self.depth or gameState.isWin() or gameState.isLose():
             return self.evaluationFunction(gameState)
         
-        "expectimax algorithm"
-        legalMoves = [action for action in gameState.getLegalActions(agentIndex) if action!='Stop']
+        # next possible moves
+        next_moves = [action for action in gameState.getLegalActions(agentIndex) if action is not 'Stop']
+                
+        # update next depth and next agent
+        next_agent = agentIndex + 1 # pacman -> ghost_1 -> ghost_2 -> ...
+        next_depth = current_depth
+        if next_agent >= gameState.getNumAgents():
+            next_agent = 0
+            next_depth += 1
         
-        # update next depth
-        nextIndex = agentIndex + 1
-        nextDepth = currentDepth
-        if nextIndex >= gameState.getNumAgents():
-            nextIndex = 0
-            nextDepth += 1
-        
-        results = [self.ExpectiMax( gameState.generateSuccessor(agentIndex, action) , nextDepth, nextIndex) for action in legalMoves]
+        # Evaluate next moves having maximum score
+        moves_scores = [self.ExpectiMax(gameState.generateSuccessor(agentIndex, action), next_depth, next_agent) for action in next_moves]
             
-        if agentIndex == 0 and currentDepth == 1: # pacman first move
-            bestMove = max(results)
-            bestIndices = [index for index in range(len(results)) if results[index] == bestMove]
-            chosenIndex = random.choice(bestIndices) # Pick randomly among the best
-            #print 'pacman %d' % bestMove
-            return legalMoves[chosenIndex]
+        # decide the next move here
+        if agentIndex == 0 and current_depth == 1: # at root
+            return next_moves[moves_scores.index(max(moves_scores))]
         
-        if agentIndex == 0:
-            bestMove = max(results)
-            #print bestMove
-            return bestMove
-        else:
-            "In ghost node, return the average(expected) value of action"
-            bestMove = sum(results)/len(results)
-            #print bestMove, sum(results), len(results)
-            return bestMove
+        if agentIndex: # expect node, calculate the mean
+            return sum(moves_scores)/len(moves_scores)
+        return max(moves_scores) # root node is max node
 
 def betterEvaluationFunction(currentGameState):
     """
@@ -331,18 +312,16 @@ def betterEvaluationFunction(currentGameState):
     closestFood = min([util.manhattanDistance(currentPos, foodPos) for foodPos in currentFoodList])
     foodScore = 1.0 / closestFood
     
-    "obtain ghost, capsule, hunting score"
     if GhostStates:
         ghostPositions = [ghostState.getPosition() for ghostState in GhostStates]
         ScaredTimes = [ghostState.scaredTimer for ghostState in GhostStates]
         ghostDistances = [util.manhattanDistance(currentPos, ghostPos) for ghostPos in ghostPositions]
         
-        if sum(ScaredTimes) == 0 : # escape and eat mode
+        if sum(ScaredTimes) == 0 : 
             closestGhost = min(ghostDistances)
             ghostCenterPos = ( sum([ghostPos[0] for ghostPos in ghostPositions])/len(GhostStates),\
                                sum([ghostPos[1] for ghostPos in ghostPositions])/len(GhostStates))
             ghostCenterDist = util.manhattanDistance(currentPos, ghostCenterPos)
-            #print 'center ' + str(ghostCenterPos)
             if ghostCenterDist <= closestGhost and closestGhost >= 1 and closestGhost <= 5:
                 if len(capsulePos) != 0:
                     closestCapsule = min([util.manhattanDistance(capsule,currentPos) for capsule in capsulePos])
@@ -370,7 +349,7 @@ def betterEvaluationFunction(currentGameState):
                 weightGhost, ghostScore = 15.0, (-1.0 / closestGhost)
             else:
                 ghostScore = -1.0 / closestGhost
-        else: # hunter mode
+        else:
             normalGhostDist = []
             closestPrey = sys.maxsize
             ghostCenterX, ghostCenterY = 0.0, 0.0
@@ -399,12 +378,10 @@ def betterEvaluationFunction(currentGameState):
                     ghostScore = - 1.0 / closestGhost
             weightHunter, hunterScore = 35.0, (1.0 / closestPrey)
     
-    "a new evaluation function."
     heuristic = currentGameState.getScore() + \
                 weightFood*foodScore + weightGhost*ghostScore + \
                 weightCapsule*capsuleScore + weightHunter*hunterScore
     return heuristic
-    util.raiseNotDefined()
 
 # Abbreviation
 better = betterEvaluationFunction
