@@ -70,9 +70,7 @@ class ReflexAgent(Agent):
         # Useful information you can extract from a GameState (pacman.py)
         successorGameState = currentGameState.generatePacmanSuccessor(action)
         newPos = successorGameState.getPacmanPosition()
-        newFood = successorGameState.getFood()
         newGhostStates = successorGameState.getGhostStates()
-        newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
 
         "*** YOUR CODE HERE ***" 
         # Get possible locations of ghost in next State
@@ -88,10 +86,10 @@ class ReflexAgent(Agent):
 
         # return fail value when ghost catch pacman
         if newPos in ghosts:
-            return -1
+            return -sys.maxsize
         # return reward for food when pacman eat food
         if current_food[x][y]:
-            return sys.maxsize
+            return 10
 
         # evaluate all food locations in the map by Manhantan distance, the farther the less points
         return 1/min([util.manhattanDistance(newPos, food) for food in current_food.asList()]) # max score is (w + h) which is maximum score can get from the Manhantan distance
@@ -163,7 +161,7 @@ class MinimaxAgent(MultiAgentSearchAgent):
             return self.evaluationFunction(gameState)
         
         # next possible moves
-        next_moves = [action for action in gameState.getLegalActions(agentIndex) if action is not 'Stop']
+        next_moves = [action for action in gameState.getLegalActions(agentIndex) if action != 'Stop']
         
         # update next depth and next agent
         next_agent = agentIndex + 1 # pacman -> ghost_1 -> ghost_2 -> ...
@@ -202,7 +200,7 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
             return self.evaluationFunction(gameState), alpha, beta
         
         # next possible moves
-        next_moves = [action for action in gameState.getLegalActions(agentIndex) if action is not 'Stop']
+        next_moves = [action for action in gameState.getLegalActions(agentIndex) if action != 'Stop']
         
         # update next depth and next agent
         next_agent = agentIndex + 1 # pacman -> ghost_1 -> ghost_2 -> ...
@@ -257,7 +255,6 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
         """
         "*** YOUR CODE HERE ***"
         return self.ExpectiMax(gameState, current_depth=1, agentIndex=0)
-        util.raiseNotDefined()
 
     def ExpectiMax(self, gameState, current_depth, agentIndex):
         # stop when reach the depth or win or lose
@@ -265,7 +262,7 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
             return self.evaluationFunction(gameState)
         
         # next possible moves
-        next_moves = [action for action in gameState.getLegalActions(agentIndex) if action is not 'Stop']
+        next_moves = [action for action in gameState.getLegalActions(agentIndex) if action != 'Stop']
                 
         # update next depth and next agent
         next_agent = agentIndex + 1 # pacman -> ghost_1 -> ghost_2 -> ...
@@ -290,98 +287,50 @@ def betterEvaluationFunction(currentGameState):
     Your extreme ghost-hunting, pellet-nabbing, food-gobbling, unstoppable
     evaluation function (question 5).
 
-    DESCRIPTION: <write something here so we know what you did>
+    DESCRIPTION: 
+    I present opposite relationship by the negative coefficient, the direct relationship by the positive coefficient
+    The metric I collected as following
+    1) Food: distance to closest food, number of food left
+    2) Ghost: distance to closest ghost, distance to closest scared ghost
+    3) Capsule: distance to closest capsule, number of capsule left
+    4) Current score:
     """
     "*** YOUR CODE HERE ***"
-    if currentGameState.isWin() :  return sys.maxsize
-    if currentGameState.isLose() :  return -sys.maxsize
+    # win game
+    if currentGameState.isWin():  
+        return sys.maxsize
+    # lose game
+    if currentGameState.isLose():  
+        return -sys.maxsize
     
-    currentPos = currentGameState.getPacmanPosition()
-    currentFood = currentGameState.getFood()
-    GhostStates = currentGameState.getGhostStates()
-    capsulePos = currentGameState.getCapsules()
-    
-    weightFood, weightGhost, weightCapsule, weightHunter = 5.0, 5.0, 5.0, 0.0
-    ghostScore, capsuleScore, hunterScore = 0.0, 0.0, 0.0
-    #print '\nnewPos '+str(newPos)
-    #print 'oldFood '+str(oldFood.asList())
-    #print "score %d" % successorGameState.getScore()
-    
-    "obtain food score" # may closestFood be zero?
-    currentFoodList = currentFood.asList()
-    closestFood = min([util.manhattanDistance(currentPos, foodPos) for foodPos in currentFoodList])
-    foodScore = 1.0 / closestFood
-    
-    if GhostStates:
-        ghostPositions = [ghostState.getPosition() for ghostState in GhostStates]
-        ScaredTimes = [ghostState.scaredTimer for ghostState in GhostStates]
-        ghostDistances = [util.manhattanDistance(currentPos, ghostPos) for ghostPos in ghostPositions]
-        
-        if sum(ScaredTimes) == 0 : 
-            closestGhost = min(ghostDistances)
-            ghostCenterPos = ( sum([ghostPos[0] for ghostPos in ghostPositions])/len(GhostStates),\
-                               sum([ghostPos[1] for ghostPos in ghostPositions])/len(GhostStates))
-            ghostCenterDist = util.manhattanDistance(currentPos, ghostCenterPos)
-            if ghostCenterDist <= closestGhost and closestGhost >= 1 and closestGhost <= 5:
-                if len(capsulePos) != 0:
-                    closestCapsule = min([util.manhattanDistance(capsule,currentPos) for capsule in capsulePos])
-                    if closestCapsule <= 3:
-                        weightCapsule, capsuleScore = 20.0, (1.0 / closestCapsule)
-                        weightGhost, ghostScore = 3.0, (-1.0 / (ghostCenterDist+1))
-                    else:
-                        weightGhost, ghostScore = 10.0, (-1.0 / (ghostCenterDist+1))
-                else:
-                    weightGhost, ghostScore = 10.0, (-1.0 / (ghostCenterDist+1))
-            elif ghostCenterDist >= closestGhost and closestGhost >= 1 :
-                weightFood *= 2
-                if len(capsulePos) != 0:
-                    closestCapsule = min([util.manhattanDistance(capsule,currentPos) for capsule in capsulePos])
-                    if closestCapsule <= 3:
-                        weightCapsule, capsuleScore = 15.0, (1.0 / closestCapsule)
-                        weightGhost, ghostScore = 3.0, (-1.0 / closestGhost)
-                    else:
-                        ghostScore = -1.0 / closestGhost
-                else:
-                    ghostScore = -1.0 / closestGhost
-            elif closestGhost == 0:
-                return -sys.maxsize
-            elif closestGhost == 1:
-                weightGhost, ghostScore = 15.0, (-1.0 / closestGhost)
-            else:
-                ghostScore = -1.0 / closestGhost
-        else:
-            normalGhostDist = []
-            closestPrey = sys.maxsize
-            ghostCenterX, ghostCenterY = 0.0, 0.0
-            for (index, ghostDist) in enumerate(ghostDistances):
-                if ScaredTimes[index] == 0 :
-                    normalGhostDist.append(ghostDist)
-                    ghostCenterX += ghostPositions[index][0]
-                    ghostCenterY += ghostPositions[index][1]
-                else:
-                    if ghostDist <= ScaredTimes[index] :
-                        if ghostDist < closestPrey:
-                            closestPrey = ghostDistances[index]
-            if normalGhostDist:
-                closestGhost = min(normalGhostDist)
-                ghostCenterPos = ( ghostCenterX/len(normalGhostDist), ghostCenterY/len(normalGhostDist))
-                ghostCenterDist = util.manhattanDistance(currentPos, ghostCenterPos)
-                if ghostCenterDist <= closestGhost and closestGhost >= 1 and closestGhost <= 5:
-                    weightGhost, ghostScore = 10.0, (- 1.0 / (ghostCenterDist+1))
-                elif ghostCenterDist >= closestGhost and closestGhost >= 1 :
-                    ghostScore = -1.0 / closestGhost
-                elif closestGhost == 0:
-                    return -sys.maxsize
-                elif closestGhost == 1:
-                    weightGhost, ghostScore = 15.0, (-1.0 / closestGhost)
-                else:
-                    ghostScore = - 1.0 / closestGhost
-            weightHunter, hunterScore = 35.0, (1.0 / closestPrey)
-    
-    heuristic = currentGameState.getScore() + \
-                weightFood*foodScore + weightGhost*ghostScore + \
-                weightCapsule*capsuleScore + weightHunter*hunterScore
-    return heuristic
+    # setting up
+    pacman = currentGameState.getPacmanPosition()
+
+    # food
+    foods = currentGameState.getFood().asList()
+    food_closest = min([util.manhattanDistance(pacman, food) for food in foods])
+    food_left = len(foods)
+
+    # ghost
+    ghosts = currentGameState.getGhostStates()
+    ghost_active_list = [util.manhattanDistance(pacman, ghost.getPosition()) for ghost in ghosts if ghost.scaredTimer==0]
+    ghost_active = min(ghost_active_list) if len(ghost_active_list) else 1
+    ghost_scared_list = [util.manhattanDistance(pacman, ghost.getPosition()) for ghost in ghosts if ghost.scaredTimer]
+    ghost_scared = min(ghost_scared_list) if len(ghost_scared_list) else 0
+
+    # capsule
+    capsules = currentGameState.getCapsules()
+    capsule_closest = min([util.manhattanDistance(pacman, capsule) for capsule in capsules], default = 0)
+    capsule_left = len(capsules)
+
+    # score
+    scores = currentGameState.getScore()
+
+    scores = [-2*food_closest -4*food_left,
+              -1/ghost_active - 2*ghost_scared,
+              -10*capsule_closest - 20*capsule_left,
+              100*scores]
+    return sum(scores)
 
 # Abbreviation
 better = betterEvaluationFunction
