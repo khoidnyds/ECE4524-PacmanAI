@@ -1,0 +1,181 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Pacman",
+            "type": "python",
+            "request": "launch",
+            "program": "pacman.py",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Autograder",
+            "type": "python",
+            "request": "launch",
+            "program": "autograder.py",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Q1-test",
+            "type": "python",
+            "request": "launch",
+            "program": "pacman.py",
+            "console": "integratedTerminal",
+            "args": ["-l", "tinyMaze", "-p", "SearchAgent", "-a", "fn=tinyMazeSearch"]
+        },
+        {
+            "name": "Q1-tinyMaze",
+            "type": "python",
+            "request": "launch",
+            "program": "pacman.py",
+            "console": "integratedTerminal",
+            "args": ["-l", "tinyMaze", "-p", "SearchAgent"]
+        },
+        {
+            "name": "Q1-mediumMaze",
+            "type": "python",
+            "request": "launch",
+            "program": "pacman.py",
+            "console": "integratedTerminal",
+            "args": ["-l", "mediumMaze", "-p", "SearchAgent"]
+        },
+        {
+            "name": "Q1-bigMaze",
+            "type": "python",
+            "request": "launch",
+            "program": "pacman.py",
+            "console": "integratedTerminal",
+            "args": ["-l", "bigMaze", "-z", "0.5", "-p", "SearchAgent"]
+        },
+        {
+            "name": "Q2-test",
+            "type": "python",
+            "request": "launch",
+            "program": "pacman.py",
+            "console": "integratedTerminal",
+            "args": ["-l", "tinyMaze", "-p", "SearchAgent", "-a", "fn=bfs"]
+        },
+        {
+            "name": "Q2-tinyMaze",
+            "type": "python",
+            "request": "launch",
+            "program": "pacman.py",
+            "console": "integratedTerminal",
+            "args": ["-l", "tinyMaze", "-p", "SearchAgent", "-a", "fn=bfs"]
+        },
+        {
+            "name": "Q2-mediumMaze",
+            "type": "python",
+            "request": "launch",
+            "program": "pacman.py",
+            "console": "integratedTerminal",
+            "args": ["-l", "mediumMaze", "-p", "SearchAgent", "-a", "fn=bfs"]
+        },
+        {
+            "name": "Q2-bigMaze",
+            "type": "python",
+            "request": "launch",
+            "program": "pacman.py",
+            "console": "integratedTerminal",
+            "args": ["-l", "bigMaze", "-z", "0.5", "-p", "SearchAgent", "-a", "fn=bfs"]
+        },
+        {
+            "name": "Q2-eightpuzzle",
+            "type": "python",
+            "request": "launch",
+            "program": "eightpuzzle.py",
+            "console": "integratedTerminal",
+        },
+        {
+            "name": "Q3-mediumMaze",
+            "type": "python",
+            "request": "launch",
+            "program": "pacman.py",
+            "console": "integratedTerminal",
+            "args": ["-l", "mediumMaze", "-p", "SearchAgent", "-a", "fn=ucs"]
+        },
+        {
+            "name": "Q3-mediumDottedMaze",
+            "type": "python",
+            "request": "launch",
+            "program": "pacman.py",
+            "console": "integratedTerminal",
+            "args": ["-l", "mediumDottedMaze", "-p", "StayEastSearchAgent"]
+        },
+        {
+            "name": "Q3-mediumScaryMaze",
+            "type": "python",
+            "request": "launch",
+            "program": "pacman.py",
+            "console": "integratedTerminal",
+            "args": ["-l", "mediumScaryMaze", "-p", "StayWestSearchAgent"]
+        },
+        {
+            "name": "Q4",
+            "type": "python",
+            "request": "launch",
+            "program": "pacman.py",
+            "console": "integratedTerminal",
+            "args": ["-l", "bigMaze", "-p", "SearchAgent", "-z", "0.5", "-a", "fn=astar,heuristic=manhattanHeuristic"]
+        },
+        {
+            "name": "Q5-tinyCorners",
+            "type": "python",
+            "request": "launch",
+            "program": "pacman.py",
+            "console": "integratedTerminal",
+            "args": ["-l", "tinyCorners", "-p", "SearchAgent", "-a", "fn=bfs,prob=CornersProblem"]
+        },
+        {
+            "name": "Q5-mediumCorners",
+            "type": "python",
+            "request": "launch",
+            "program": "pacman.py",
+            "console": "integratedTerminal",
+            "args": ["-l", "mediumCorners", "-p", "SearchAgent", "-a", "fn=bfs,prob=CornersProblem"]
+        },
+        {
+            "name": "Q6",
+            "type": "python",
+            "request": "launch",
+            "program": "pacman.py",
+            "console": "integratedTerminal",
+            "args": ["-l", "mediumCorners", "-p", "SearchAgent", "-a", "fn=aStarSearch,prob=CornersProblem,heuristic=cornersHeuristic"]
+        },
+        {
+            "name": "Q6",
+            "type": "python",
+            "request": "launch",
+            "program": "pacman.py",
+            "console": "integratedTerminal",
+            "args": ["-l", "mediumCorners", "-p", "SearchAgent", "-a", "fn=aStarSearch,prob=CornersProblem,heuristic=cornersHeuristic"]
+        },
+        {
+            "name": "Q7-testSearch",
+            "type": "python",
+            "request": "launch",
+            "program": "pacman.py",
+            "console": "integratedTerminal",
+            "args": ["-l", "testSearch", "-p", "AStarFoodSearchAgent"]
+        },
+        {
+            "name": "Q7-trickySearch",
+            "type": "python",
+            "request": "launch",
+            "program": "pacman.py",
+            "console": "integratedTerminal",
+            "args": ["-l", "trickySearch", "-p", "AStarFoodSearchAgent"]
+        },
+        {
+            "name": "Q8",
+            "type": "python",
+            "request": "launch",
+            "program": "pacman.py",
+            "console": "integratedTerminal",
+            "args": ["-l", "bigSearch", "-p", "ClosestDotSearchAgent", "-z", "0.5"]
+        }
+    ]
+}
