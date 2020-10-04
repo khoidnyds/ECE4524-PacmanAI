@@ -146,14 +146,6 @@
             "args": ["-l", "mediumCorners", "-p", "SearchAgent", "-a", "fn=aStarSearch,prob=CornersProblem,heuristic=cornersHeuristic"]
         },
         {
-            "name": "Q6",
-            "type": "python",
-            "request": "launch",
-            "program": "pacman.py",
-            "console": "integratedTerminal",
-            "args": ["-l", "mediumCorners", "-p", "SearchAgent", "-a", "fn=aStarSearch,prob=CornersProblem,heuristic=cornersHeuristic"]
-        },
-        {
             "name": "Q7-testSearch",
             "type": "python",
             "request": "launch",
