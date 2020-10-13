@@ -668,7 +668,7 @@ class Question8Test(testClasses.TestCase):
         super(Question8Test, self).__init__(question, testDict)
 
     def execute(self, grades, moduleDict, solutionDict):
-        studentSolution = moduleDict['analysis'].question8()
+        studentSolution = moduleDict['analysis'].question6()
         studentSolution = str(studentSolution).strip().lower()
         hashedSolution = sha1(studentSolution.encode('utf-8')).hexdigest()
         if hashedSolution == '46729c96bb1e4081fdc81a8ff74b3e5db8fba415':
