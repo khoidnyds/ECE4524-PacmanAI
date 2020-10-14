@@ -98,6 +98,85 @@
             "program": "autograder.py",
             "console": "integratedTerminal",
             "args": ["-q", "q4"]
+        },
+        {
+            "name": "Q5-1",
+            "type": "python",
+            "request": "launch",
+            "program": "gridworld.py",
+            "console": "integratedTerminal",
+            "args": ["-a", "q", "-k", "100"]
+        },
+        {
+            "name": "Q5-2",
+            "type": "python",
+            "request": "launch",
+            "program": "gridworld.py",
+            "console": "integratedTerminal",
+            "args": ["-a", "q", "-k", "100", "--noise", "0.0", "-e", "0.1"]
+        },
+        {
+            "name": "Q5-3",
+            "type": "python",
+            "request": "launch",
+            "program": "gridworld.py",
+            "console": "integratedTerminal",
+            "args": ["-a", "q", "-k", "100", "--noise", "0.0", "-e", "0.9"]
+        },
+        {
+            "name": "Q5-test",
+            "type": "python",
+            "request": "launch",
+            "program": "autograder.py",
+            "console": "integratedTerminal",
+            "args": ["-q", "q5"]
+        },
+        {
+            "name": "Q5-crawler",
+            "type": "python",
+            "request": "launch",
+            "program": "crawler.py",
+            "console": "integratedTerminal",
+        },
+        {
+            "name": "Q6",
+            "type": "python",
+            "request": "launch",
+            "program": "gridworld.py",
+            "console": "integratedTerminal",
+            "args": ["-a", "q", "-k", "50", "-n", "0", "-g", "BridgeGrid", "-e", "1"]
+        },
+        {
+            "name": "Q6-test",
+            "type": "python",
+            "request": "launch",
+            "program": "autograder.py",
+            "console": "integratedTerminal",
+            "args": ["-q", "q6"]
+        },
+        {
+            "name": "Q7-1",
+            "type": "python",
+            "request": "launch",
+            "program": "pacman.py",
+            "console": "integratedTerminal",
+            "args": ["-p", "PacmanQAgent", "-x", "2000", "-n", "2010", "-l", "smallGrid"]
+        },
+        {
+            "name": "Q7-2",
+            "type": "python",
+            "request": "launch",
+            "program": "pacman.py",
+            "console": "integratedTerminal",
+            "args": ["-p", "PacmanQAgent", "-n", "10", "-l", "smallGrid", "-a", "numTraining=10"]
+        },
+        {
+            "name": "Q7-test",
+            "type": "python",
+            "request": "launch",
+            "program": "autograder.py",
+            "console": "integratedTerminal",
+            "args": ["-q", "q7"]
         }
     ]
 }
