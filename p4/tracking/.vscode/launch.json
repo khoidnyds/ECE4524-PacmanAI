@@ -5,12 +5,130 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Autograder",
+            "type": "python",
+            "request": "launch",
+            "program": "autograder.py",
+            "console": "integratedTerminal",
+        },
+        {
+            "name": "Busters",
+            "type": "python",
+            "request": "launch",
+            "program": "busters.py",
+            "console": "integratedTerminal",
+        },
+        {
             "name": "Q1",
             "type": "python",
             "request": "launch",
             "program": "autograder.py",
             "console": "integratedTerminal",
             "args": ["-q", "q1"]
+        },
+        {
+            "name": "Q1 no graphics",
+            "type": "python",
+            "request": "launch",
+            "program": "autograder.py",
+            "console": "integratedTerminal",
+            "args": ["-q", "q1", "--no-graphics"]
+        },
+        {
+            "name": "Q2",
+            "type": "python",
+            "request": "launch",
+            "program": "autograder.py",
+            "console": "integratedTerminal",
+            "args": ["-q", "q2"]
+        },
+        {
+            "name": "Q2 no graphics",
+            "type": "python",
+            "request": "launch",
+            "program": "autograder.py",
+            "console": "integratedTerminal",
+            "args": ["-q", "q2", "--no-graphics"]
+        },
+        {
+            "name": "Q3",
+            "type": "python",
+            "request": "launch",
+            "program": "autograder.py",
+            "console": "integratedTerminal",
+            "args": ["-q", "q3"]
+        },
+        {
+            "name": "Q3 no graphics",
+            "type": "python",
+            "request": "launch",
+            "program": "autograder.py",
+            "console": "integratedTerminal",
+            "args": ["-q", "q3", "--no-graphics"]
+        },
+        {
+            "name": "Q4",
+            "type": "python",
+            "request": "launch",
+            "program": "autograder.py",
+            "console": "integratedTerminal",
+            "args": ["-q", "q4"]
+        },
+        {
+            "name": "Q4 no graphics",
+            "type": "python",
+            "request": "launch",
+            "program": "autograder.py",
+            "console": "integratedTerminal",
+            "args": ["-q", "q4", "--no-graphics"]
+        },
+        {
+            "name": "Q5",
+            "type": "python",
+            "request": "launch",
+            "program": "autograder.py",
+            "console": "integratedTerminal",
+            "args": ["-q", "q5"]
+        },
+        {
+            "name": "Q5 no graphics",
+            "type": "python",
+            "request": "launch",
+            "program": "autograder.py",
+            "console": "integratedTerminal",
+            "args": ["-q", "q5", "--no-graphics"]
+        },
+        {
+            "name": "Q6",
+            "type": "python",
+            "request": "launch",
+            "program": "autograder.py",
+            "console": "integratedTerminal",
+            "args": ["-q", "q6"]
+        },
+        {
+            "name": "Q6 no graphics",
+            "type": "python",
+            "request": "launch",
+            "program": "autograder.py",
+            "console": "integratedTerminal",
+            "args": ["-q", "q6", "--no-graphics"]
+        },
+        {
+            "name": "Q7",
+            "type": "python",
+            "request": "launch",
+            "program": "autograder.py",
+            "console": "integratedTerminal",
+            "args": ["-q", "q7"]
+        },
+        {
+            "name": "Q7 no graphics",
+            "type": "python",
+            "request": "launch",
+            "program": "autograder.py",
+            "console": "integratedTerminal",
+            "args": ["-q", "q7", "--no-graphics"]
         }
     ]
 }
